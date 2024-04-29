@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    </link>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .card {
+            min-height: 350px;
+
+        }
+
+        .card .btn {
+            margin-top: auto;
+            margin-left: auto;
+            margin-right: .5rem;
+            margin-bottom: .5rem;
+            width: fit-content;
+        }
+
+        .card h2 {
+            margin-left: 1rem;
+            margin-top: .5rem
+        }
+
+        .card img {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .modal-body {
+            width: 100%;
+        }
+
+        .modal-body img {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+        <div class="row row-cols-2 row-cols-lg-2 g-2 g-lg-3" style="margin-top: 1rem;" id="cards">
+            <!-- 1 -->
+            <!-- <div class="col-md-6">
+                <div class="card">
+                    <h2>Titulo 1</h2>
+                    <img src="/PW/PL/LAB1/static/logo.jpeg" alt="" height="200px " width="200px">
+                    <p style="height: 0; visibility: hidden;">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae obcaecati enim facere deleniti
+                        natus quidem tempora! Eaque qui nihil sapiente, soluta amet provident officia, modi tempore
+                        quisquam assumenda pariatur ullam alias ex earum eveniet tenetur necessitatibus a ducimus, iusto
+                        iure fugiat voluptatibus. Sed hic amet accusantium ipsum! Accusantium natus autem unde
+                        perferendis veniam nostrum inventore deserunt consequuntur minima.
+                    </p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        onclick="detailsButton(event)">Detalhes</button>
+                </div>
+            </div> -->
+
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModelTitle"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body"></div>
+                <!--
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script>
+        const generateLoremIpsum = () => {
+            const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
+            return loremIpsum;
+        }
+
+        const detailsButton = (e) => {
+            const parent = e.target.parentNode;
+            const title = parent.querySelector('h2').textContent;
+            const description = parent.querySelector('p').textContent || generateLoremIpsum();
+
+            const modalTitle = document.getElementById('exampleModelTitle');
+            modalTitle.textContent = title;
+
+            const img = parent.querySelector('img').src;
+
+            const modalBody = document.getElementById('modal-body');
+
+            modalBody.innerHTML = `
+                <img src="${img}" alt="" height="200px " width="200px"><br>
+                <h4>Descrição</h4>
+                <p>${description}</p>
+            `
+        }
+
+        const updateCars = async () => {
+            fetch("http://localhost:3000/api/carros")
+                .then(response => response.json())
+                .then((data) => {
+                    const cardsDiv = document.getElementById('cards');
+                    console.log(data);
+                    data.carros.forEach((car) => {
+                        cardsDiv.innerHTML += `
+                        <div class="col-md-6">
+                            <div class="card">
+                                <h2>${car.Marca}</h2>
+                                <img src="${car.Foto}" alt="" height="200px " width="200px">
+                                <p style="height: 0; visibility: hidden;">
+                                    ${car.Detalhes}
+                                </p>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                    onclick="detailsButton(event)">Detalhes</button>
+                            </div>
+                        </div>
+                        `
+                    })
+                });
+        }
+
+        updateCars();
+    </script>
+</body>
+
+</html>

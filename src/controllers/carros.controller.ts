@@ -5,7 +5,7 @@ import Carro from "@/types/car";
 //devolve todos os carros
 export const getAll = async (req: Request, res: Response) => {
   const jsonFile = fs.readFileSync("static/data/local/data.json", "utf-8");
-  return res.send(JSON.parse(jsonFile)).json();
+  return res.status(200).send(JSON.parse(jsonFile));
 };
 
 //devolve o carro com o id
@@ -23,7 +23,7 @@ export const getById = async (req: Request, res: Response) => {
     return res.status(404).send("Carro não encontrado");
   }
   //just return same id
-  return res.send(car).json();
+  return res.send(car);
 };
 
 //cria um carro

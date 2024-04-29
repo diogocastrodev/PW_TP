@@ -6,11 +6,15 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import routes from "./router";
+import publicRouter from "./router/public.router";
+import privateRouter from "./router/private.router";
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+app.use("/", publicRouter);
+app.use("/bo", privateRouter);
 app.use("/api", routes);
 
 app.listen(process.env.SERVER_PORT, () => {

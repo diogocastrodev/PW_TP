@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zona Segura</title>
+</head>
+
+<body>
+    <h1>Bem-vindo à Zona Sergura</h1>
+    <p>Para aceder às páginas seguinte é necessários estar autenticado no sistema.</p>
+    <button id="acessarPaginaProtegida">CRUD dos Carros</button>
+    <script>
+        document.getElementById("acessarPaginaProtegida").addEventListener("click", () => {
+            // Substitua 'SEU_TOKEN_AQUI' pelo token de acesso fornecido pelo usuário
+            const token = localStorage.getItem("token");
+            //alert(token);
+            // Faça uma requisição para a página protegida, incluindo o token de acesso no cabeçalho de autorização
+            fetch("/bo/gerir", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.text(); // Ou response.json() se a resposta for JSON
+                    } else {
+                        throw new Error("Falha ao acessar a página protegida");
+                    }
+                })
+                .then((data) => {
+                    //console.log(data); // Exibe a resposta da página protegida
+                    // Faça o que você precisa fazer com a resposta da página protegida
+                    document.write(data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert("Erro ao acessar a página protegida. Por favor, faça login.");
+                    // Redirecionar o usuário para a página de login ou fazer outra ação apropriada
+                });
+        });
+    </script>
+</body>
+
+</html>

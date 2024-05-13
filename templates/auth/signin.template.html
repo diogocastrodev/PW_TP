@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <title>Novo Utilizador</title>
+</head>
+
+<body>
+    <!--Falta aqui o card -->
+    <div class="container">
+        <h2>Criar Utilizador</h2>
+        <div class="card" style="width: 400px">
+            <img class="card-img-top" src="https://www.designi.com.br/images/preview/11153874.jpg" alt="Piloto"
+                style="width: 100%" />
+            <div class="card-body">
+                <!--Falta aqui o formulário-->
+                <form method="post" action="">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" placeholder="Escreve o email" name="email"
+                            required />
+                    </div>
+                    <div class="form-group">
+                        <label for="pswd">Password:</label>
+                        <input type="password" class="form-control" id="pswd"
+                            placeholder="Escreve a confirmação da password" name="pswd" required />
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="validaLogin()">Login</button>
+                    <button type="button" class="btn btn-primary" onclick="leTokenSFF()">le token</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+<script type="text/JavaScript">
+        function validaPassword(){
+            var password1 = document.getElementById("pswd").value;
+            var password2 = document.getElementById("coPwd").value;
+    
+            // Validate through RegularExpression
+            var passwordcheck1 =/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+    
+            if (!passwordcheck1.test(password1)){
+               alert("Password inválida");
+            return false;
+            }
+            if(!password1.match(password2)){
+                alert("A password e a confirmação não são iguais");
+            return false;
+            }
+            validaLogin();
+        return true;
+
+           }
+
+           const validaLogin = async () => {
+      var dados = {
+        email: document.getElementById("email").value,
+        password: document.getElementById("pswd").value,
+      };
+      const response= await fetch("http://localhost:3000/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dados),
+      })
+      console.log(response.ok);
+      dados= await  response.json()
+      if(!response.ok){
+        alert("Erro ao fazer login");
+      }
+      else{
+        alert("Login efetuado com sucesso");
+        console.log(dados);
+        // Guardar o token no local storage
+        localStorage.setItem("token", dados.token);
+        window.location.href = "http://localhost:3000/bo/";
+      }
+  };
+
+  const leTokenSFF = async () => {
+    var dados = {
+      token: localStorage.getItem("token"),
+    };
+    console.log(JSON.stringify(dados));
+    const response= await fetch("http://localhost:3000/api/auth/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dados),
+    })
+    console.log(response);
+    dados= await  response.json()
+    console.log(dados);
+    if(!response.ok){
+      alert("Erro ao fazer login");
+    }
+    else{
+      alert("token lido com sucesso");
+      console.log(dados);
+    }
+};
+
+
+
+      </script>
+
+</html>

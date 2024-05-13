@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import routes from "./router";
 import publicRouter from "./router/public.router";
 import privateRouter from "./router/private.router";
+import authMiddleWare from "./middleware/auth.middleware";
 
 const app = express();
 app.use(bodyParser.json());
